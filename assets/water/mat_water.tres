@@ -1,10 +1,48 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=4 uid="uid://byumtcccq4ew3"]
+[gd_resource type="ShaderMaterial" load_steps=4 format=4 uid="uid://byumtcccq4ew3"]
 
 [ext_resource type="Shader" path="res://assets/shaders/spatial/water.gdshader" id="1_uffek"]
+[ext_resource type="Texture2D" uid="uid://dxmc5thgmhne4" path="res://assets/textures/water/foam_albedo.png" id="2_mhvsr"]
+[ext_resource type="Texture2D" uid="uid://bu88lwf31d6m0" path="res://assets/textures/water/post/lense_glare_a.png" id="2_w133h"]
 
 [resource]
-render_priority = 1
+render_priority = -128
 shader = ExtResource("1_uffek")
-shader_parameter/roughness = 0.65
+shader_parameter/roughness = 0.4
 shader_parameter/normal_strength = 1.0
+shader_parameter/timescale = 1.0
+shader_parameter/height_alpha_mod = 0.2
+shader_parameter/height_alpha_pow = 2.0
+shader_parameter/beach_alpha_fadeout = 0.05
+shader_parameter/underwater_tex_border = 4.0
+shader_parameter/water_albedo_uv_scale = 0.05
+shader_parameter/foam_uv_scale = 0.05
+shader_parameter/water_highlight_uv_scale = 0.05
+shader_parameter/depth_fade_distance = 1.0
+shader_parameter/absorbance = 2.0
+shader_parameter/shallow_color = Color(0.22, 0.66, 1, 1)
+shader_parameter/deep_color = Color(0, 0.25, 0.45, 1)
+shader_parameter/foam_albedo_map = ExtResource("2_mhvsr")
+shader_parameter/water_highlight_map = ExtResource("2_w133h")
+shader_parameter/sss_strength = 7.0
+shader_parameter/sss_1 = 0.65
+shader_parameter/sss_2 = 0.7
+shader_parameter/sss_3 = 0.5
+shader_parameter/sss_4 = 1.0
+shader_parameter/backlight_dot_adj = 0.65
+shader_parameter/backlight_dot_adj2 = 0.0
+shader_parameter/backlight_stren = 1.0
+shader_parameter/backlight_pt_stren = 1.0
+shader_parameter/backlight_refract = 1.0
+shader_parameter/backlight_color = Color(0, 0.83, 0.677833, 1)
+shader_parameter/backlight_filter = null
+shader_parameter/backlight_dist_modifier = 20.0
+shader_parameter/backlight_dist_modifier_min = 0.3
+shader_parameter/backlight_dist_modifier_max = 2.0
+shader_parameter/backlight_h_mul = 0.3
+shader_parameter/backlight_h_add = 2.0
+shader_parameter/backlight_pow = 2.0
+shader_parameter/backlight_dir_affect_min = 0.3
+shader_parameter/backlight_grad_pow = 1.0
+shader_parameter/backlight_grad_mul = 1.0
+shader_parameter/backlight_grad_add = 0.0
 shader_parameter/map_scales = PackedVector4Array(0.0113636, 0.0113636, 1, 1, 0.0175439, 0.0175439, 0.75, 1, 0.0625, 0.0625, 0, 0.25)

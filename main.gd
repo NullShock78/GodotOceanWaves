@@ -20,6 +20,8 @@ func _init() -> void:
 	if Engine.is_editor_hint(): return
 	if DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	Engine.max_fps = 60
+	
 	DisplayServer.window_set_size(DisplayServer.screen_get_size() * 0.75)
 	DisplayServer.window_set_position(DisplayServer.screen_get_size() * 0.25 / 2.0)
 

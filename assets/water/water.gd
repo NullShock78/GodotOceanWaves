@@ -53,6 +53,8 @@ enum MeshQuality { LOW, HIGH }
 		next_update_time = next_update_time - (1.0/(updates_per_second + 1e-10) - 1.0/(value + 1e-10))
 		updates_per_second = value
 
+@export var enabled:bool = true
+
 var wave_generator : WaveGenerator :
 	set(value):
 		if wave_generator: wave_generator.queue_free()
@@ -74,12 +76,13 @@ func _ready() -> void:
 
 func _process(delta : float) -> void:
 	# Update waves once every 1.0/updates_per_second.
-	if updates_per_second == 0 or time >= next_update_time:
-		var target_update_delta := 1.0 / (updates_per_second + 1e-10)
-		var update_delta := delta if updates_per_second == 0 else target_update_delta + (time - next_update_time)
-		next_update_time = time + target_update_delta
-		_update_water(update_delta)
-	time += delta
+	if enabled:
+		if updates_per_second == 0 or time >= next_update_time:
+			var target_update_delta := 1.0 / (updates_per_second + 1e-10)
+			var update_delta := delta if updates_per_second == 0 else target_update_delta + (time - next_update_time)
+			next_update_time = time + target_update_delta
+			_update_water(update_delta)
+		time += delta
 
 func _setup_wave_generator() -> void:
 	if parameters.size() <= 0: return

@@ -1,8 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://dx4r13gqfh13"]
+[gd_scene load_steps=23 format=3 uid="uid://dx4r13gqfh13"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_skarq"]
 [ext_resource type="Script" path="res://assets/water/wave_cascade_parameters.gd" id="2_pw5n6"]
-[ext_resource type="Texture2D" uid="uid://cnft723bala47" path="res://assets/skybox.png" id="3_0ksgj"]
 [ext_resource type="Script" path="res://assets/player/camera.gd" id="4_v2yip"]
 [ext_resource type="Material" uid="uid://byumtcccq4ew3" path="res://assets/water/mat_water.tres" id="5_lt75t"]
 [ext_resource type="ArrayMesh" uid="uid://ix4vp1y05f1s" path="res://assets/water/clipmap_high.obj" id="5_n61pp"]
@@ -12,33 +11,7 @@
 [ext_resource type="Shader" path="res://assets/shaders/spatial/sea_spray.gdshader" id="8_eu8jb"]
 [ext_resource type="Material" uid="uid://5xqyddws6rt5" path="res://assets/water/mat_spray.tres" id="9_skbf4"]
 [ext_resource type="Texture2D" uid="uid://dtm5tyuh2slqt" path="res://assets/water/sea_spray.png" id="10_spqpo"]
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_t7jwl"]
-panorama = ExtResource("3_0ksgj")
-
-[sub_resource type="Sky" id="Sky_vroi3"]
-sky_material = SubResource("PanoramaSkyMaterial_t7jwl")
-
-[sub_resource type="Environment" id="Environment_icybu"]
-background_mode = 2
-sky = SubResource("Sky_vroi3")
-tonemap_mode = 2
-fog_mode = 1
-fog_light_color = Color(0.272954, 0.419272, 0.484632, 1)
-fog_sun_scatter = 0.05
-fog_density = 1.0
-fog_aerial_perspective = 0.626
-fog_sky_affect = 0.0
-fog_depth_curve = 0.25
-fog_depth_begin = 200.0
-fog_depth_end = 350.0
-volumetric_fog_enabled = true
-volumetric_fog_density = 0.0
-volumetric_fog_length = 256.0
-adjustment_enabled = true
-adjustment_brightness = 0.85
-adjustment_contrast = 1.07
-adjustment_saturation = 1.5
+[ext_resource type="Material" uid="uid://djndybe7r0qks" path="res://assets/fog_mat.tres" id="10_x7nhq"]
 
 [sub_resource type="Resource" id="Resource_adqv5"]
 script = ExtResource("2_pw5n6")
@@ -50,9 +23,9 @@ wind_direction = 20.0
 fetch_length = 150.0
 swell = 0.8
 spread = 0.2
-detail = 1.0
-whitecap = 0.5
-foam_amount = 8.0
+detail = 0.842105
+whitecap = 0.51
+foam_amount = 6.27068
 
 [sub_resource type="Resource" id="Resource_luhq0"]
 script = ExtResource("2_pw5n6")
@@ -64,7 +37,7 @@ wind_direction = 15.0
 fetch_length = 150.0
 swell = 0.8
 spread = 0.4
-detail = 1.0
+detail = 0.827068
 whitecap = 0.5
 foam_amount = 0.0
 
@@ -97,38 +70,78 @@ shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_tsx6q")
 
 [sub_resource type="QuadMesh" id="QuadMesh_06d3e"]
 
-[sub_resource type="FogMaterial" id="FogMaterial_riff4"]
-density = 8.0
-albedo = Color(0.988718, 0.989631, 0.989629, 1)
-height_falloff = 0.176
-edge_fade = 1.75
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fnd68"]
+sky_top_color = Color(0.36, 0.5225, 0.75, 1)
+sky_horizon_color = Color(0.5427, 0.591498, 0.67, 1)
+ground_bottom_color = Color(0.36, 0.5225, 0.75, 1)
+ground_horizon_color = Color(0.5427, 0.591498, 0.67, 1)
+ground_curve = 0.1442
+sun_angle_max = 17.15
+sun_curve = 0.0724452
+
+[sub_resource type="Sky" id="Sky_ahjar"]
+sky_material = SubResource("ProceduralSkyMaterial_fnd68")
+process_mode = 3
+
+[sub_resource type="Environment" id="Environment_2a2rl"]
+background_mode = 2
+sky = SubResource("Sky_ahjar")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 2
+fog_light_color = Color(1, 1, 1, 1)
+fog_sun_scatter = 0.05
+fog_sky_affect = 0.0
+fog_depth_curve = 0.25
+fog_depth_begin = 200.0
+fog_depth_end = 350.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_length = 256.0
+adjustment_enabled = true
+adjustment_brightness = 0.85
+adjustment_contrast = 1.07
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_skarq")
 
-[node name="Environment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_icybu")
-
 [node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.945601, -0.0516921, 0.321197, -0.00840572, 0.983084, 0.18296, -0.325221, -0.175707, 0.929171, 0, 10, 0)
+transform = Transform3D(-0.507291, -0.543615, 0.668684, 1.19783e-08, 0.775939, 0.630808, -0.861775, 0.320004, -0.393627, 0, 10, 0)
+light_bake_mode = 0
+shadow_enabled = true
 shadow_bias = 0.0
 shadow_normal_bias = 6.464
 shadow_opacity = 0.8
 shadow_blur = 5.0
+sky_mode = 1
+
+[node name="Sun2" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.507291, -0.543615, 0.668685, 1.19783e-08, 0.775939, 0.630808, -0.861774, 0.320003, -0.393627, 0, 10, 0)
+light_color = Color(1, 1, 0.839216, 1)
+light_energy = 2.0
+shadow_bias = 0.0
+shadow_normal_bias = 6.464
+shadow_opacity = 0.8
+shadow_blur = 5.0
+sky_mode = 2
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(-0.996195, -0.0151344, 0.0858316, 0, 0.984807, 0.173648, -0.0871557, 0.172987, -0.981061, 0, 10, -25)
 script = ExtResource("4_v2yip")
 
 [node name="Water" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 0, 7)
 sorting_offset = 999.0
 material_override = ExtResource("5_lt75t")
 cast_shadow = 0
 mesh = ExtResource("5_n61pp")
 skeleton = NodePath("")
 script = ExtResource("7_s0x5e")
+water_color = Color(0.2494, 0.37281, 0.43, 1)
+foam_color = Color(0.860877, 0.82338, 0.792378, 1)
 parameters = Array[ExtResource("2_pw5n6")]([SubResource("Resource_adqv5"), SubResource("Resource_luhq0"), SubResource("Resource_83u3u")])
+updates_per_second = 0.0
+enabled = false
 
 [node name="WaterSprayEmitter" type="GPUParticles3D" parent="Water"]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
@@ -140,8 +153,9 @@ process_material = ExtResource("9_skbf4")
 draw_pass_1 = SubResource("QuadMesh_06d3e")
 
 [node name="FogVolume" type="FogVolume" parent="."]
+visible = false
 shape = 4
-material = SubResource("FogMaterial_riff4")
+material = ExtResource("10_x7nhq")
 
 [node name="OceanAudioPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_jpklm")
@@ -152,3 +166,16 @@ autoplay = true
 stream = ExtResource("8_6r5si")
 volume_db = -30.0
 autoplay = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.2155, 0)
+size = Vector3(10, 36.0491, 10)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.3309, 1.78967, 0)
+visible = false
+light_energy = 4.0
+omni_range = 24.931
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2a2rl")

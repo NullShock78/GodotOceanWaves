@@ -1,0 +1,138 @@
+[gd_scene load_steps=20 format=3 uid="uid://bxc0tv2kdp6te"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_f2kbq"]
+[ext_resource type="Script" path="res://assets/player/camera.gd" id="2_fjust"]
+[ext_resource type="Material" uid="uid://byumtcccq4ew3" path="res://assets/water/mat_water.tres" id="3_d5yyn"]
+[ext_resource type="ArrayMesh" uid="uid://ix4vp1y05f1s" path="res://assets/water/clipmap_high.obj" id="4_f4u3o"]
+[ext_resource type="Script" path="res://assets/water/water.gd" id="5_vuka3"]
+[ext_resource type="Script" path="res://assets/water/wave_cascade_parameters.gd" id="6_gvgbg"]
+[ext_resource type="Shader" path="res://assets/shaders/spatial/sea_spray.gdshader" id="7_fbyn7"]
+[ext_resource type="Texture2D" uid="uid://dtm5tyuh2slqt" path="res://assets/water/sea_spray.png" id="8_5u12c"]
+[ext_resource type="Material" uid="uid://5xqyddws6rt5" path="res://assets/water/mat_spray.tres" id="9_pckn7"]
+[ext_resource type="AudioStream" uid="uid://cvvn0vke5comw" path="res://assets/ocean_loop.wav" id="10_actpx"]
+[ext_resource type="AudioStream" uid="uid://ck6vmandgjhy0" path="res://assets/wind_loop.wav" id="11_w8h0b"]
+
+[sub_resource type="Resource" id="Resource_adqv5"]
+script = ExtResource("6_gvgbg")
+tile_length = Vector2(88, 88)
+displacement_scale = 1.0
+normal_scale = 1.0
+wind_speed = 10.0
+wind_direction = 20.0
+fetch_length = 150.0
+swell = 0.8
+spread = 0.2
+detail = 0.842105
+whitecap = 0.51
+foam_amount = 6.27068
+
+[sub_resource type="Resource" id="Resource_luhq0"]
+script = ExtResource("6_gvgbg")
+tile_length = Vector2(57, 57)
+displacement_scale = 0.75
+normal_scale = 1.0
+wind_speed = 5.0
+wind_direction = 15.0
+fetch_length = 150.0
+swell = 0.8
+spread = 0.4
+detail = 0.827068
+whitecap = 0.5
+foam_amount = 0.0
+
+[sub_resource type="Resource" id="Resource_83u3u"]
+script = ExtResource("6_gvgbg")
+tile_length = Vector2(16, 16)
+displacement_scale = 0.0
+normal_scale = 0.25
+wind_speed = 20.0
+wind_direction = 20.0
+fetch_length = 550.0
+swell = 0.8
+spread = 0.4
+detail = 1.0
+whitecap = 0.25
+foam_amount = 3.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_k6xhe"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tsx6q"]
+seamless = true
+noise = SubResource("FastNoiseLite_k6xhe")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ds3o1"]
+render_priority = 0
+shader = ExtResource("7_fbyn7")
+shader_parameter/max_alpha = 0.666
+shader_parameter/albedo_texture = ExtResource("8_5u12c")
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_tsx6q")
+
+[sub_resource type="QuadMesh" id="QuadMesh_06d3e"]
+
+[sub_resource type="FogMaterial" id="FogMaterial_riff4"]
+density = 8.0
+albedo = Color(0.988718, 0.989631, 0.989629, 1)
+height_falloff = 0.176
+edge_fade = 1.75
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_f2kbq")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.507291, -0.543615, 0.668685, 1.19783e-08, 0.775939, 0.630808, -0.861774, 0.320003, -0.393627, 0, 10, 0)
+light_energy = 2.0
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_normal_bias = 6.464
+shadow_opacity = 0.8
+shadow_blur = 5.0
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(-0.996195, -0.0151344, 0.0858316, 0, 0.984807, 0.173648, -0.0871557, 0.172987, -0.981061, 0, 10, -25)
+script = ExtResource("2_fjust")
+
+[node name="Water" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 5)
+sorting_offset = 999.0
+material_override = ExtResource("3_d5yyn")
+cast_shadow = 0
+mesh = ExtResource("4_f4u3o")
+skeleton = NodePath("")
+script = ExtResource("5_vuka3")
+water_color = Color(0.3096, 0.391873, 0.43, 1)
+foam_color = Color(0.860877, 0.82338, 0.792378, 1)
+parameters = Array[ExtResource("6_gvgbg")]([SubResource("Resource_adqv5"), SubResource("Resource_luhq0"), SubResource("Resource_83u3u")])
+updates_per_second = 0.0
+
+[node name="WaterSprayEmitter" type="GPUParticles3D" parent="Water"]
+transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_ds3o1")
+cast_shadow = 0
+amount = 32768
+lifetime = 6.0
+process_material = ExtResource("9_pckn7")
+draw_pass_1 = SubResource("QuadMesh_06d3e")
+
+[node name="FogVolume" type="FogVolume" parent="."]
+shape = 4
+material = SubResource("FogMaterial_riff4")
+
+[node name="OceanAudioPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_actpx")
+volume_db = 15.0
+autoplay = true
+
+[node name="WindAudioPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_w8h0b")
+volume_db = -30.0
+autoplay = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.2155, 0)
+size = Vector3(10, 36.0491, 10)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.3309, 1.78967, 0)
+visible = false
+light_energy = 4.0
+omni_range = 24.931
